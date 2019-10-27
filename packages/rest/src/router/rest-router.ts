@@ -3,18 +3,16 @@
  */
 import RadixRouter from 'radix-router';
 import queryString from 'query-string';
-import { CampkitHTTPRequest } from '@campkit/core';
-
-interface HTTPRequest extends CampkitHTTPRequest {}
+import { HttpRequest } from '@campkit/common';
 
 export class RestRouter {
   protected router = new RadixRouter();
-  protected httpRequest: HTTPRequest;
+  protected HttpRequest: HttpRequest;
   private path: string;
   private pathWithoutQueryString: string;
 
-  constructor(httpRequest: HTTPRequest) {
-    this.httpRequest = httpRequest;
+  constructor(HttpRequest: HttpRequest) {
+    this.HttpRequest = HttpRequest;
     this.path = this.setInvokedPath();
     this.pathWithoutQueryString = this.setInvokedPathWithoutQuery();
   }
@@ -25,12 +23,12 @@ export class RestRouter {
   }
 
   private setInvokedPath() {
-    const { method, path } = this.httpRequest;
+    const { method, path } = this.HttpRequest;
     return `[${method}]${path}`;
   }
 
   private setInvokedPathWithoutQuery() {
-    const { method, path } = this.httpRequest;
+    const { method, path } = this.HttpRequest;
     const pathWithoutQueryString = ('' + path).split('?')[0];
     return `[${method}]${pathWithoutQueryString}`;
   }
@@ -40,18 +38,21 @@ export class RestRouter {
    * example: "/users/123" -> "/users/:id"
    */
   public find() {
-    const { path, body } = this.httpRequest;
+    const { path, body, headers } = this.HttpRequest;
     const route = this.router.lookup(this.pathWithoutQueryString);
+    const queryStringParams = ('' + path).split('?')[1];
 
-    // ?some=param
-    const qs = queryString.parse(('' + path).split('?')[1], {
-      parseNumbers: true,
-      parseBooleans: true,
-    });
+    const qs = queryStringParams
+      ? queryString.parse(queryStringParams, {
+          parseNumbers: true,
+          parseBooleans: true,
+        })
+      : {};
 
     let augmentedRoute = {
       ...route,
       query: qs,
+      headers,
     };
 
     if (body) {

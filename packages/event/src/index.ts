@@ -1,7 +1,6 @@
 /*
- * Campkit @rest
+ * Campkit @event
  */
 import 'reflect-metadata';
 
-// export * from './rest.controller';
 export * from './decorators';

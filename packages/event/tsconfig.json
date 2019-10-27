@@ -1,5 +1,5 @@
 {
-  "include": ["src", "types", "../common/src/services/logger.service.ts"],
+  "include": ["src", "types"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",
@@ -9,14 +9,14 @@
     "sourceMap": true,
     "rootDir": "./",
     "strict": true,
-    "noImplicitAny": true,
+    "noImplicitAny": false, // roger
     "strictNullChecks": true,
     "strictFunctionTypes": true,
     "strictPropertyInitialization": true,
     "noImplicitThis": true,
     "alwaysStrict": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false,
+    "noUnusedLocals": false, // roger
+    "noUnusedParameters": false, // roger
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "moduleResolution": "node",
